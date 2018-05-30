@@ -1,0 +1,116 @@
+var request = require("request");
+
+var cheerio = require("cheerio");
+var http = require("http");
+var url = require('url');
+var corpo;
+
+http.createServer(function (req, res) {
+	//res.writeHead('http-equiv="content-type" content="text/html; charset=windows-1252');
+	//res.write('<head> <meta http-equiv="content-type" content="text/html; charset=windows-1252"><title>Avvisi</title>
+//<style type="text/css"> @import url(style.css); </style></head>');
+	 intestazione='<head><meta charset="iso-8859-1" ><title>Ingnegneria Uniparthenope</title> <link rel="stylesheet" type="text/css" href="http://www.ingegneria.uniparthenope.it/columns.css"><link rel="stylesheet" type="text/css" href="http://www.ingegneria.uniparthenope.it/hhh.css"><meta http-equiv="Content-Type" content="Type=text/html; charset=utf-8"></head>';
+	res.write(intestazione);
+	
+  
+
+	var q = url.parse(req.url).pathname;
+	
+	if (q == '/') {
+   
+res.write('<div id="bg"><div id="outer"><div id="header"><div id="nav"><ul class=""><li><a href="./">Home</a></li><li class=""><a href="./orari">Orario Lezioni</a></li><li><a href="./avvisi">News</a></li><li><a href="./professori">Docenti</a></li><li><a href="./personale">Personale</a></li></ul><br class="clear __web-inspector-hide-shortcut__"></div></div>');		
+			
+			/*<li id=""><a href="http://www.ingegneria.uniparthenope.it/index.php?page=logpta">Login PTA</a></li>
+			<li id=""><a href="http://www.ingegneria.uniparthenope.it/index.php?page=logpro">Login Docenti</a></li>
+		  	<li><a href="http://www.uniparthenope.it/" target="_blankpage">Home page Ateneo</a></li>		 */ 
+	res.write('<div id="main">Sei nella Reception. Posso aiutarti?</div>');
+	//res.write('</div>');	
+	res.write('</div>');
+	 //res.write('Sei nella Reception. Posso aiutarti?');
+	res.write('</div>');
+		 
+	
+	res.end();
+	  } else	
+	 if (q=='/avvisi')
+	{		
+		
+	res.write('<div id="bg"><div id="outer"><div id="header"><div id="nav"><ul class=""><li><a href="./">Home</a></li><li class=""><a href="./orari">Orario Lezioni</a></li><li><a href="./avvisi">News</a></li><li><a href="./professori">Docenti</a></li><li><a href="./personale">Personale</a></li></ul><br class="clear __web-inspector-hide-shortcut__"></div></div>');		
+	res.write('<div id="main">');
+		//res.write('<div id="content">')
+		res.write('<h1>AVVISI</h1>');
+request({uri: "http://www.ingegneria.uniparthenope.it/index.php?page=news",
+}, function(error, response, body) {
+	if (!error && response.statusCode == 200){
+		var $ = cheerio.load(body);
+		$('div.news').each(function(i,element){
+			 var a=$(this);
+			 res.write(a.html());
+			console.log(a.html());
+			
+		});
+		
+	};
+	 res.end('</div>');
+	}); 
+	
+
+	}
+	  if (q=='/orari'){
+	
+	res.write('<div id="bg"><div id="outer"><div id="header"><div id="nav"><ul class=""><li><a href="./">Home</a></li><li class=""><a href="./orari">Orario Lezioni</a></li><li><a href="./avvisi">News</a></li><li><a href="./professori">Docenti</a></li><li><a href="./personale">Personale</a></li></ul><br class="clear __web-inspector-hide-shortcut__"></div></div>');		
+	res.write('<div id="main">');
+		//res.write('<div id="content">')
+		res.write('<p></p><p></p>');
+		res.write('<p><h1>Orario lezioni</h1></p>');
+		res.write('<p><h3><a href="http://www.ingegneria.uniparthenope.it/orario/civile.pdf">Ingegneria Civile e Ambientale</a></h3></p>');
+		res.write('<h3><a href="http://www.ingegneria.uniparthenope.it/orario/civile_LM.pdf">Ingegneria Civile Magistale</a></h3></p>');
+		res.write('<p><h3><a href="http://www.ingegneria.uniparthenope.it/orario/gestionale.pdf">Ingegneria Gestionale</a></h3></p>');
+		res.write('<p><h3><a href="http://www.ingegneria.uniparthenope.it/orario/gestionale_LM.pdf">Ingegneria Gestionale Magistale</a></h3></p>');
+		res.write('<p><h3><a href="http://www.ingegneria.uniparthenope.it/orario/inf_bio_tlc.pdf">Ingegneria Informatica, Biomedica e delle Telecomunicazioni</a></h3></p>');
+		res.write('<p><h3><a href="http://www.ingegneria.uniparthenope.it/orario/ISDC.pdf">Ingegneria della Sicurezza e delle Comunicazioni</a></h3></p>');
+		
+	    res.end('</div>'); }
+	 
+	if (q=='/professori')  {
+res.write('<div id="bg"><div id="outer"><div id="header"><div id="nav"><ul class=""><li><a href="./">Home</a></li><li class=""><a href="./orari">Orario Lezioni</a></li><li><a href="./avvisi">News</a></li><li><a href="./professori">Docenti</a></li><li><a href="./personale">Personale</a></li></ul><br class="clear __web-inspector-hide-shortcut__"></div></div>');		
+	res.write('<div id="main">');
+	//res.write('<div id="center">');
+request({
+  uri: "http://www.ingegneria.uniparthenope.it/index.php?page=personale",
+   //uri: "http://www.ingegneria.uniparthenope.it/index.php?page=news",
+   
+}, function(error, response, body) {
+	if (!error && response.statusCode == 200){
+		var $ = cheerio.load(body);
+		res.write('<h1>Professori</h1>');
+	res.write('<table class="datatable">');
+	res.write($('table.datatable').eq(0).html());
+	res.end('</table>');
+	};
+	
+	res.end('</div>');
+});
+	 
+	};
+	
+	if (q=='/personale') 	{
+res.write('<div id="bg"><div id="outer"><div id="header"><div id="nav"><ul class=""><li><a href="./">Home</a></li><li class=""><a href="./orari">Orario Lezioni</a></li><li><a href="./avvisi">News</a></li><li><a href="./professori">Docenti</a></li><li><a href="./personale">Personale</a></li></ul><br class="clear __web-inspector-hide-shortcut__"></div></div>');		
+	res.write('<div id="main">');
+	//res.write('<div id="content">')
+		request({
+  uri: "http://www.ingegneria.uniparthenope.it/index.php?page=personale",
+   //uri: "http://www.ingegneria.uniparthenope.it/index.php?page=news",
+   
+}, function(error, response, body) {
+	if (!error && response.statusCode == 200){
+		var $ = cheerio.load(body);
+	res.write('<h1>Personale tecnico-amministrativo</h1>');
+	res.write('<table class="datatable">');
+	res.write($('table.datatable').eq(1).html());
+	res.end('</table>');
+	};
+});
+	};
+}).listen(8080);
+	
